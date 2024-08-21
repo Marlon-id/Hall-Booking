@@ -62,9 +62,14 @@ public class Login extends JFrame implements ActionListener {
         setSize(300, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        
+        JLabel headingLabel = new JLabel("Hall Booking Program");
+        headingLabel.setBounds(80, -5, 250, 25);
+        add(headingLabel);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
+
 
         JLabel userLabel = new JLabel("Username:");
         userLabel.setBounds(10, 20, 80, 25);
