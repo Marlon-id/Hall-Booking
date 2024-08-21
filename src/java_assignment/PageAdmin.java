@@ -44,7 +44,7 @@ public class PageAdmin extends JFrame implements ActionListener {
         if (currentUserRole.equals("superadmin")) {
             roles = new String[]{"Admin"};
         } else {
-            roles = new String[]{"Scheduler", "Manager"};
+            roles = new String[]{"Scheduler", "Manager", "Customer"};
         }
         roleComboBox = new JComboBox<>(roles);
         roleComboBox.setBounds(100, 80, 165, 25);
