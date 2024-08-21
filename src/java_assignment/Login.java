@@ -93,8 +93,8 @@ public class Login extends JFrame implements ActionListener {
                         // new ManagerPage();
                         break;
                     case "Admin":
-                        JOptionPane.showMessageDialog(this, "Admin");
-                        // new PageAdmin(role);
+                        // JOptionPane.showMessageDialog(this, "Admin");
+                        new PageAdmin(role);
                         break;
                     case "superadmin":
                         new PageAdmin(role);
