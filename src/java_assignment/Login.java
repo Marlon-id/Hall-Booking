@@ -12,103 +12,102 @@ public class Login extends JFrame implements ActionListener {
     private JButton exitButton;
 
     public Login() {
-        login();
+        setupUI();
     }
-    
+    private void setupUI() {
+        setTitle("Login");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+
+        JLabel headingLabel = new JLabel("Hall Booking Program");
+        headingLabel.setBounds(80, -5, 250, 25);
+        add(headingLabel);
+
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setBounds(50, 30, 100, 25);
+        add(usernameLabel);
+
+        usernameField = new JTextField();
+        usernameField.setBounds(150, 30, 100, 25);
+        add(usernameField);
+
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setBounds(50, 60, 100, 25);
+        add(passwordLabel);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(150, 60, 100, 25);
+        add(passwordField);
+
+        loginButton = new JButton("Login");
+        loginButton.setBounds(50, 100, 90, 25);
+        loginButton.addActionListener(this);
+        add(loginButton);
+
+        registerButton = new JButton("Register");
+        registerButton.setBounds(160, 100, 90, 25);
+        registerButton.addActionListener(this);
+        add(registerButton);
+
+        exitButton = new JButton("Exit");
+        exitButton.setBounds(195, 130, 80, 25);
+        exitButton.setBackground(Color.RED);
+        exitButton.setForeground(Color.WHITE);
+        add(exitButton);
+
+        setVisible(true);
+    }
+
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginButton) {
-            String username = usernameField.getText();
-            String passwordStr = new String(passwordField.getPassword());
-            int password;
-            
-            try {
-                password = Integer.parseInt(passwordStr);
-                
-                if(FileHandler.isValidAdmin(username, password)) {
-                    Admin loggedUser = FileHandler.getAdminByUsernameAndPassword(username, password);
-
-                    if (loggedUser != null) {
-                        String role = loggedUser.getRole();
-
-                        // Close the login window
-                        this.dispose();
-
-                        // Open the appropriate window based on the role
-                        if (role.equalsIgnoreCase("superadmin")) {
-                            PageAdmin adminPage = new PageAdmin("superadmin");
-                            adminPage.setVisible(true);
-                        } else if (role.equalsIgnoreCase("admin")) {
-                            PageAdmin adminPage = new PageAdmin("admin");
-                            adminPage.setVisible(true);
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Access denied. Only superadmin and admin can log in.");
-                        }
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Invalid username or password.");
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Password must be a number.");
-            }
-        }else if (e.getSource() == registerButton) {
+            login();
+        } else if (e.getSource() == registerButton) {
             register();
         } else if (e.getSource() == exitButton) {
             System.exit(0);
         }
     }
 
-    public void login() {
-        setTitle("Login");
-        setSize(300, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        
-        JLabel headingLabel = new JLabel("Hall Booking Program");
-        headingLabel.setBounds(80, -5, 250, 25);
-        add(headingLabel);
+    private void login() {
+        String username = usernameField.getText();
+        int password = Integer.parseInt(new String(passwordField.getPassword()));
 
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
+        for (Admin admin : FileHandler.allAdmin) {
+            if (admin.getName().equals(username) && admin.getPassword() == password) {
+                String role = admin.getRole();
+                JOptionPane.showMessageDialog(this, "Login successful! Redirecting to your dashboard.");
 
-
-        JLabel userLabel = new JLabel("Username:");
-        userLabel.setBounds(10, 20, 80, 25);
-        panel.add(userLabel);
-
-        usernameField = new JTextField(20);
-        usernameField.setBounds(100, 20, 165, 25);
-        panel.add(usernameField);
-
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setBounds(10, 50, 80, 25);
-        panel.add(passwordLabel);
-
-        passwordField = new JPasswordField(20);
-        passwordField.setBounds(100, 50, 165, 25);
-        panel.add(passwordField);
-
-        loginButton = new JButton("Login");
-        loginButton.setBounds(10, 80, 80, 25);
-        panel.add(loginButton);
-
-        registerButton = new JButton("Register");
-        registerButton.setBounds(100, 80, 100, 25);
-        panel.add(registerButton);
-
-        exitButton = new JButton("Exit");
-        exitButton.setBounds(195, 130, 80, 25);
-        exitButton.setBackground(Color.RED);
-        exitButton.setForeground(Color.WHITE);
-        panel.add(exitButton);
-
-        passwordField.addActionListener(this);
-        usernameField.addActionListener(this);
-        loginButton.addActionListener(this);
-        registerButton.addActionListener(this);
-        exitButton.addActionListener(this);
-
-        add(panel);
-        setVisible(true);
+                // Redirect user based on role
+                switch (role) {
+                    case "Customer":
+                        JOptionPane.showMessageDialog(this, "Customer");
+                        // new CustomerPage();
+                        break;
+                    case "Scheduler":
+                        JOptionPane.showMessageDialog(this, "Scheduler");
+                        // new SchedulerPage();
+                        break;
+                    case "Manager":
+                        JOptionPane.showMessageDialog(this, "Manager");
+                        // new ManagerPage();
+                        break;
+                    case "Admin":
+                        JOptionPane.showMessageDialog(this, "Admin");
+                        // new PageAdmin(role);
+                        break;
+                    case "superadmin":
+                        new PageAdmin(role);
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(this, "Unknown role. Please contact support.");
+                        break;
+                }
+                dispose(); // Close the login window
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(this, "Invalid credentials. Please try again.");
     }
 
     public String getUsername() {
