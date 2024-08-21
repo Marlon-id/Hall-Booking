@@ -76,7 +76,7 @@ public class PageAdmin extends JFrame implements ActionListener {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Password must be a number.");
             }
-        }
+        } 
     }
 
     public String getUsername() {

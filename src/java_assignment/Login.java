@@ -9,7 +9,7 @@ public class Login extends JFrame implements ActionListener {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registerButton;
-    private JButton ExitButton;
+    private JButton exitButton;
 
     public Login() {
         login();
@@ -50,6 +50,10 @@ public class Login extends JFrame implements ActionListener {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Password must be a number.");
             }
+        }else if (e.getSource() == registerButton) {
+            register();
+        } else if (e.getSource() == exitButton) {
+            System.exit(0);
         }
     }
 
@@ -86,17 +90,17 @@ public class Login extends JFrame implements ActionListener {
         registerButton.setBounds(100, 80, 100, 25);
         panel.add(registerButton);
 
-        ExitButton = new JButton("Exit");
-        ExitButton.setBounds(195, 130, 80, 25);
-        ExitButton.setBackground(Color.RED);
-        ExitButton.setForeground(Color.WHITE);
-        panel.add(ExitButton);
+        exitButton = new JButton("Exit");
+        exitButton.setBounds(195, 130, 80, 25);
+        exitButton.setBackground(Color.RED);
+        exitButton.setForeground(Color.WHITE);
+        panel.add(exitButton);
 
         passwordField.addActionListener(this);
         usernameField.addActionListener(this);
         loginButton.addActionListener(this);
         registerButton.addActionListener(this);
-        ExitButton.addActionListener(this);
+        exitButton.addActionListener(this);
 
         add(panel);
         setVisible(true);
@@ -108,5 +112,16 @@ public class Login extends JFrame implements ActionListener {
 
     public String getPassword() {
         return new String(passwordField.getPassword());
+    }
+
+    private void register() {
+        String username = usernameField.getText();
+        int password = Integer.parseInt(new String(passwordField.getPassword()));
+
+        Admin newCustomer = new Admin("customer", username, password);
+        FileHandler.allAdmin.add(newCustomer);
+        FileHandler.write();
+
+        JOptionPane.showMessageDialog(this, "Registration successful!");
     }
 }
