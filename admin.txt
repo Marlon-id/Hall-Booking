@@ -1,6 +1,0 @@
-superadmin superadmin 123
-Admin A 1
-Scheduler S 1
-Manager M 1
-customer Test 1
-Customer c 1
